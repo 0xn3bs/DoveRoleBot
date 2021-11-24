@@ -14,8 +14,7 @@
 
 ### or with PM2:
 
-    pm2 start "dotnet run --no-build --configuration=Release --updateInterval 60 --botToken [Discord Bot Token Here] --roleid [Member Role Id] --guildId [Guild Id] --timelimit [In minutes] --kickchannelid [kick log channel id]
-" --name DoveRoleBot
+    pm2 start "dotnet run --no-build --configuration=Release --updateInterval 60 --botToken [Discord Bot Token Here] --roleid [Member Role Id] --guildId [Guild Id] --timelimit [In minutes] --kickchannelid [kick log channel id]" --name DoveRoleBot
 
 ## How to update:
 ### Standalone:

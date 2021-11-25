@@ -26,6 +26,8 @@ namespace DoveRoleBot
         private Timer _timer = null!;
         private SocketGuild _guild = null!;
         private SocketGuildChannel _kickChannel = null!;
+        private bool _running = false;
+        private bool _isReady = false;
 
 
         //  https://discord.com/oauth2/authorize?client_id=913095241626693643&scope=bot+applications.commands&permissions=2050
@@ -61,20 +63,30 @@ namespace DoveRoleBot
         {
             _guild = _discordSocketClient.GetGuild(_settings.GuildId);
             _kickChannel = (SocketGuildChannel)_discordSocketClient.GetChannel(_settings.KickChannelId);
+            _isReady = true;
+
+            KickNonMembers().GetAwaiter().GetResult();
 
             return Task.CompletedTask;
         }
         private void DoWork(object? state)
         {
+            if (!_isReady)
+                return;
+
             KickNonMembers().GetAwaiter().GetResult();
         }
 
         private async Task KickNonMembers()
         {
+            if (_running)
+            {
+                return;
+            }
+
+            _running = true;
             if (_guild != null)
             {
-                var users = _guild.GetUsersAsync();
-
                 await foreach (var result in _guild.GetUsersAsync())
                 {
                     foreach (var user in result)
@@ -111,6 +123,8 @@ namespace DoveRoleBot
                         }
                     }
                 }
+
+                _running = false;
             }
         }
 
